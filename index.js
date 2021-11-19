@@ -1,8 +1,12 @@
 const express = require('express');
 
+const config = require('./config');
+
 const app = express();
 
-app.arguments(express.json());
-app.arguments(express.urlencoded({extended: true}));
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
-app.listen()
+app.listen(config.port, () => {
+    console.log(`Server started on port: ${config.port}`);
+});    
