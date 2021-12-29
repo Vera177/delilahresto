@@ -1,0 +1,7 @@
+const path = require('path');
+
+module.exports = {
+    'config': path.resolve('./sequelizer', 'config.js'),
+    'seeders-path': path.resolve('./sequelizer/seeders'),
+    'migrations-path': path.resolve('./sequelizer/migrations')
+};
