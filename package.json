@@ -37,6 +37,8 @@
   "devDependencies": {
     "morgan": "^1.10.0",
     "nodemon": "^2.0.14",
-    "sequelize-cli": "^6.3.0"
+    "sequelize-cli": "^6.3.0",
+    "yamljs": "^0.3.0",
+    "swagger-ui-express": "^4.3.0"
   }
 }
