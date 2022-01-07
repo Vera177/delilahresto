@@ -1,0 +1,16 @@
+openapi: 3.0.2
+info:
+  title: Delilah Resto
+  description: "Proyecto para acamica de pedido de restaurantes"
+  contact:
+    name: Vera Orduna
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+tags:
+  - name: user
+    description: Modulo de usuario
+paths:
+
+components:
+  schemas:
