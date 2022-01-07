@@ -38,12 +38,7 @@
     "morgan": "^1.10.0",
     "nodemon": "^2.0.14",
     "sequelize-cli": "^6.3.0",
-<<<<<<< HEAD
     "swagger-ui-express": "^4.3.0",
     "yamljs": "^0.3.0"
-=======
-    "yamljs": "^0.3.0",
-    "swagger-ui-express": "^4.3.0"
->>>>>>> 8e6a322bb27ca948856a7e031bbe2e374d253994
   }
 }
