@@ -10,7 +10,50 @@ servers:
 tags:
   - name: user
     description: Modulo de usuario
+  - name: role
+    description: Modulo de roles
 paths:
+  /user:
+    post:
+      tags:
+        - user
+      summary: Endpoint para crear usuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  required: true
+                email:
+                  type: string
+                  required: true
+                password: 
+                  type: string
+                  required: true
+                phone: 
+                  type: string
+                address:
+                  type: string
+                roles_id:
+                  type: number
+      responses:
+        201:
+          description: Usuario creado con exito
+          content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: number
+                  example: 201
+                message:
+                  type: string
+                  example: Usuario creado!
+
 
 components:
   schemas:
