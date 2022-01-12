@@ -43,17 +43,32 @@ paths:
         201:
           description: Usuario creado con exito
           content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                status:
-                  type: number
-                  example: 201
-                message:
-                  type: string
-                  example: Usuario creado!
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  message:
+                    type: string
+                    example: Usuario creado!
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
 
 
 components:
   schemas:
+    error:
+      type: object
+      properties:
+        status:
+          type: number
+          example: 500
+        message:
+          type: string
+          example: Internal server error

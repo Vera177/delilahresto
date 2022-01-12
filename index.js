@@ -7,6 +7,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+const userController = require('./controllers/User');
+
 if(config.env === 'development'){
     const swaggerUi = require('swagger-ui-express');
     const YAML = require('yamljs');
@@ -15,6 +17,8 @@ if(config.env === 'development'){
     const swaggerDocument = YAML.load('./docs/swagger.yaml');
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
+
+app.post('/user', userController.create);
 
 app.listen(config.port, () => {
     console.log(`Server started on port: http://localhost:${config.port}`);
