@@ -9,5 +9,6 @@ module.exports = {
         name: process.env.DB_NAME || 'delilah_resto',
         user: process.env.DB_USER || 'root',
         password: process.env.DB_PASSWORD || ''
-    }
+    },
+    jwt_secret: process.env.JWT_SECRET || 'secret'
 };

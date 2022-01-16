@@ -2,12 +2,14 @@ const { DataTypes } = require('sequelize');
 
 const connection = require('../connection');
 
-// // const roleModel = require('./role');
-
+const roleModel = require('./role');
 
 const model = connection.define(
     'users',
     {
+        user_name: {
+            type: DataTypes.STRING
+        },
         name: {
             type: DataTypes.STRING
         },
@@ -31,6 +33,6 @@ const model = connection.define(
     { timestamps: false }
 );
 
-// model.belongsTo(roleModel, {as: 'role', foreignKey: 'roles_id'});
+model.belongsTo(roleModel, {as: 'role', foreignKey: 'roles_id'});
 
 module.exports = model;

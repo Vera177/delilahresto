@@ -19,6 +19,7 @@ if(config.env === 'development'){
 }
 
 app.post('/user', userController.create);
+app.get('/user', userController.getAll);
 
 app.listen(config.port, () => {
     console.log(`Server started on port: http://localhost:${config.port}`);

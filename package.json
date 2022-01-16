@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:migrate": "sequelize-cli db:migrate",
     "db:migrate:undo": "sequelize-cli db:migrate:undo",
-    "db:migrate:reset": "sequelize-cli db:migrate:undo:all"
+    "db:migrate:reset": "sequelize-cli db:migrate:undo:all",
+    "db:seed:all": "sequelize-cli db:seed:all"
   },
   "nodemonConfig": {
     "ignore": [
