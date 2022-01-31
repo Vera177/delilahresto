@@ -43,10 +43,7 @@ class UserController {
                 data: users
             });
         } catch (error) {
-            return res.status(500).json({
-                status: 500,
-                error: 'Internal server error'
-            })
+            return next(error);
         }
     }
 
@@ -77,10 +74,7 @@ class UserController {
                 admin: user.role.name === 'admin'
             })
         } catch (error) {
-            return res.status(500).json({
-                status: 500,
-                error: 'Internal server error'
-            })
+            return next(error);
         }
     }
 }

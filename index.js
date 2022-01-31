@@ -1,6 +1,8 @@
 const express = require('express');
 
 const config = require('./config');
+const errorMiddleware = require('./middlewares/error');
+const notFoundMiddlerare = require('./middlewares/notFoundError');
 
 const app = express();
 
@@ -20,6 +22,10 @@ if(config.env === 'development'){
 
 app.post('/user', userController.create);
 app.get('/user', userController.getAll);
+app.post('/user/login', userController.login);
+
+app.use(notFoundMiddlerare);
+app.use(errorMiddleware);
 
 app.listen(config.port, () => {
     console.log(`Server started on port: http://localhost:${config.port}`);
