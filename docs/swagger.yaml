@@ -138,7 +138,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-
+      security:
+        - Authorization: []
     
 
 components:
@@ -178,3 +179,9 @@ components:
           type: number
         name:
           type: string
+
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
