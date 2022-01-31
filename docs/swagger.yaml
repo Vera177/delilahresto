@@ -26,9 +26,11 @@ paths:
               properties:                
                 email:
                   type: string
+                  example: administrator@email.com
                   required: true
                 password: 
                   type: string
+                  example: admin
                   required: true                
       responses:
         200:
@@ -77,22 +79,31 @@ paths:
               properties:
                 user_name:
                   type: string
+                  example: test
                   required: true
                 name:
                   type: string
+                  example: testing
                   required: true
                 email:
                   type: string
+                  example: test@test.com
                   required: true
                 password: 
                   type: string
+                  example: 123456
                   required: true
                 phone: 
                   type: string
+                  example: 42518888
+                  required: true
                 address:
                   type: string
+                  example: Avenida siempre viva 123
+                  required: true
                 roles_id:
                   type: number
+                  example: 1
       responses:
         201:
           description: Usuario creado con exito
