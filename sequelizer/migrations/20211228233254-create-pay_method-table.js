@@ -30,5 +30,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
+    await queryInterface.dropTable('pay_method');
   }
 };
