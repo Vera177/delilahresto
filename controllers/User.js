@@ -14,8 +14,8 @@ class UserController {
             roles_id
         } = req.body;
         try {
-            if (!name) {
-                throw { status: 422, message: 'input name is missing' };
+            if (!user_name || !name || !password || !email || !address) {
+                throw { status: 422, message: 'user name, name, password, email and adress are required' };
             }
             await userModel.create(
                 { user_name, name, email, password, phone, address, roles_id },
@@ -49,9 +49,10 @@ class UserController {
 
     static async login(req, res) {
         try {
-            const { email, password } = req.body;
+            const { user_name, email, password } = req.body;
             const user = await userModel.findOne({
                 where: {
+                    user_name,
                     email,
                     password
                 },

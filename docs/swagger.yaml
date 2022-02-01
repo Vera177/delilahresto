@@ -12,6 +12,8 @@ tags:
     description: Modulo de usuario
   - name: role
     description: Modulo de roles
+  - name: product
+    description: Modulo de productos
 paths:
   /user/login:
     post:
@@ -23,7 +25,10 @@ paths:
           application/json:
             schema:
               type: object
-              properties:                
+              properties:
+                user_name:
+                  type: string
+                  example: administrator                
                 email:
                   type: string
                   example: administrator@email.com
@@ -151,7 +156,90 @@ paths:
                 $ref: '#/components/schemas/error'
       security:
         - Authorization: []
-    
+  /product/{id}:
+    patch:
+      tags:
+        - product
+      summary: Endpoint para actualizar producto
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Tortilla de papa
+                  required: true
+                price:
+                  type: number
+                  example: 400
+                  required: true
+                url_image:
+                  type: string
+                  example: https://www.casanhelp.com.ar/wp-content/uploads/2020/05/bagel-de-salmon-169.jpg
+      responses:
+        201:
+          description: Producto actualizado con exito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  message:
+                    type: string
+                    example: Producto actualizado!
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /product/:
+    post:
+      tags:
+        - product
+      summary: Endpoint para crear productos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Bacalao
+                  required: true
+                price:
+                  type: number
+                  example: 300
+                  required: true
+                url_image:
+                  type: string
+                  example: https://www.casanhelp.com.ar/wp-content/uploads/2020/05/bagel-de-salmon-169.jpg
+      responses:
+        201:
+          description: Producto creado con exito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  message:
+                    type: string
+                    example: Producto creado!
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
 
 components:
   schemas:

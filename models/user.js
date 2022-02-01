@@ -15,7 +15,6 @@ const model = connection.define(
         },
         email: {
             type: DataTypes.STRING
-
         },
         password: {
             type: DataTypes.STRING
