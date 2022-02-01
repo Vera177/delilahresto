@@ -41,6 +41,11 @@ module.exports = {
         name: 'Sandwich Focaccia',
         price: 440,
         url_image: 'https://www.casanhelp.com.ar/wp-content/uploads/2020/05/bagel-de-salmon-169.jpg'
+      },
+      {
+        name: 'Veggie avocado',
+        price: 310,
+        url_image: 'https://www.casanhelp.com.ar/wp-content/uploads/2020/05/bagel-de-salmon-169.jpg'
       }
     ]);
   },
