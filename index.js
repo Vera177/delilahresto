@@ -10,6 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 const userController = require('./controllers/User');
+const productController = require('./controllers/Products');
 
 if(config.env === 'development'){
     const swaggerUi = require('swagger-ui-express');
@@ -23,6 +24,10 @@ if(config.env === 'development'){
 app.post('/user', userController.create);
 app.get('/user', userController.getAll);
 app.post('/user/login', userController.login);
+app.post('/product', productController.create);
+app.put('/product/:id', productController.update);
+/* app.put('/products/:id', userController.updateProducts); -> falta hacer controlador
++ todo lo de la tabla productos primero*/
 
 app.use(notFoundMiddlerare);
 app.use(errorMiddleware);
