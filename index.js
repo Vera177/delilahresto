@@ -24,10 +24,19 @@ if(config.env === 'development'){
 app.post('/user', userController.create);
 app.get('/user', userController.getAll);
 app.post('/user/login', userController.login);
+
+app.get('/product/', productController.getAll);
+app.get('/product/:id', productController.getById);
 app.post('/product', productController.create);
-app.put('/product/:id', productController.update);
-/* app.put('/products/:id', userController.updateProducts); -> falta hacer controlador
-+ todo lo de la tabla productos primero*/
+app.patch('/product/:id', productController.update);
+app.delete('/product/:id', productController.delete);
+
+/* pedidos
+app.get('/order/', orderController.getAll);
+app.get('/order/:id', orderController.getById);
+app.post('/order', orderController.create);
+app.patch('/order/:id', orderController.update);
+Falta crear endpoints, controladores, llamarlos acá*/
 
 app.use(notFoundMiddlerare);
 app.use(errorMiddleware);
