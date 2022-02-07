@@ -9,7 +9,7 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
      await queryInterface.createTable(
-      'status',
+      'statuses',
       {
         id: {
           type: Sequelize.INTEGER,
