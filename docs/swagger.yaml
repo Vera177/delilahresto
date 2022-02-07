@@ -9,11 +9,11 @@ servers:
   - url: http://localhost:3000
 tags:
   - name: user
-    description: Modulo de usuario
-  - name: role
-    description: Modulo de roles
+    description: Iniciar sesión, crear nuevo usuario, obtener todos los usuarios
   - name: product
-    description: Modulo de productos
+    description: Obtener todos los productos, crear nuevo producto, actualizar producto por id, obtener producto por id y eliminar producto por id
+  - name: orders
+    description: Modulo de ordenes
 paths:
   /user/login:
     post:
@@ -156,49 +156,34 @@ paths:
                 $ref: '#/components/schemas/error'
       security:
         - Authorization: []
-  /product/{id}:
-    patch:
+  /product/:
+    get:
       tags:
         - product
-      summary: Endpoint para actualizar producto
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: Tortilla de papa
-                  required: true
-                price:
-                  type: number
-                  example: 400
-                  required: true
-                url_image:
-                  type: string
-                  example: https://www.casanhelp.com.ar/wp-content/uploads/2020/05/bagel-de-salmon-169.jpg
+      summary: Endpoint para obtener todos los productos
       responses:
-        201:
-          description: Producto actualizado con exito
+        200:
+          description: Obtiene todos los productos
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  status:
-                    type: number
-                    example: 201
-                  message:
-                    type: string
-                    example: Producto actualizado!
+                  status: 
+                    type: 200
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/user'
         500:
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-  /product/:
+      security:
+        - Authorization: []      
     post:
       tags:
         - product
@@ -240,7 +225,132 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-
+      security:
+        - Authorization: []
+  /product/{id}:
+    patch:
+      tags:
+        - product
+      summary: Endpoint para actualizar producto
+      parameters:
+      - name: id
+        in: path
+        description: ID del producto
+        required: true
+        schema:
+          type: number
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Tortilla de papa
+                  required: true
+                price:
+                  type: number
+                  example: 400
+                  required: true
+                url_image:
+                  type: string
+                  example: https://www.casanhelp.com.ar/wp-content/uploads/2020/05/bagel-de-salmon-169.jpg
+      responses:
+        201:
+          description: Producto actualizado con exito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  message:
+                    type: string
+                    example: Producto actualizado!
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - Authorization: []
+    get:
+      tags:
+        - product
+      summary: Endpoint para obtener producto por id
+      parameters:
+      - name: id
+        in: path
+        description: ID del producto
+        required: true
+        schema:
+          type: number
+          example: 1
+      responses:
+        200:
+          description: Obtiene producto por id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: 200
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/user'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - Authorization: []   
+    delete:
+      tags:
+        - product
+      summary: Endpoint para eliminar producto por id
+      parameters:
+      - name: id
+        in: path
+        description: ID del producto
+        required: true
+        schema:
+          type: number
+          example: 1
+      responses:
+        200:
+          description: Obtiene eliminar por id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: 200
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/user'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - Authorization: []
+  /order:
+    get:
 components:
   schemas:
     error:
