@@ -11,7 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('status', [
+    await queryInterface.bulkInsert('statuses', [
       {
         name: 'Nuevo'
       },
@@ -40,6 +40,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-     await queryInterface.bulkDelete('status', null, {});
+     await queryInterface.bulkDelete('statuses', null, {});
   }
 };

@@ -11,7 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-     await queryInterface.bulkInsert('pay_method', [
+     await queryInterface.bulkInsert('pay_methods', [
       {
         name: 'Mercado Pago'
       },
@@ -34,6 +34,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-     await queryInterface.bulkDelete('pay_method', null, {});
+     await queryInterface.bulkDelete('pay_methods', null, {});
   }
 };
