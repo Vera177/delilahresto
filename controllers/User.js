@@ -34,7 +34,7 @@ class UserController {
         try {
             const users = await userModel.findAll({
                 attributes: {
-                    exclude: ['roles_id']
+                    exclude: ['roles_id', 'password']
                 },
                 include: ['role']
             });
