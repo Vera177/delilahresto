@@ -24,11 +24,11 @@ module.exports = {
         },
         status_id: {
           type: Sequelize.INTEGER,
-          references: { model: 'status', key: 'id' }
+          references: { model: 'statuses', key: 'id' }
         },        
         pay_method_id: {
           type: Sequelize.INTEGER,
-          references: { model: 'pay_method', key: 'id' }
+          references: { model: 'pay_methods', key: 'id' }
         }              
       });
   },

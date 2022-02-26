@@ -11,6 +11,7 @@ app.use(express.urlencoded({extended: true}));
 
 const userController = require('./controllers/User');
 const productController = require('./controllers/Products');
+const orderController = require('./controllers/Order');
 
 if(config.env === 'development'){
     const swaggerUi = require('swagger-ui-express');
@@ -31,12 +32,12 @@ app.post('/product', productController.create);
 app.patch('/product/:id', productController.update);
 app.delete('/product/:id', productController.delete);
 
-/* pedidos
-app.get('/order/', orderController.getAll);
-app.get('/order/:id', orderController.getById);
+/* pedidos */
 app.post('/order', orderController.create);
-app.patch('/order/:id', orderController.update);
-Falta crear endpoints, controladores, llamarlos acá*/
+app.get('/order/:id', orderController.getById);
+app.get('/order', orderController.getAll);
+// app.patch('/order/:id', orderController.update);
+// Falta crear endpoints, controladores, llamarlos acá
 
 app.use(notFoundMiddlerare);
 app.use(errorMiddleware);
