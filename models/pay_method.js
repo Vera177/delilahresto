@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 const connection = require('../connection');
 
 const model = connection.define(
-    'pay_method',
+    'pay_methods',
     {
         name: {
             type: DataTypes.STRING
