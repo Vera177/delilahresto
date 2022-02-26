@@ -9,53 +9,32 @@ class OrdersController {
 
     static async getAll(req, res, next) {
         try {
-            // const orders = await orderModel.findAll({
-            //     attributes: {
-            //         exclude: ['users_id', 'status_id', 'pay_method_id'],
-            //     },
-            //     include: [
-            //         {
-            //             model: userModel,
-            //             as: 'user',
-            //             attributes: {
-            //                 exclude: ['password', 'roles_id', 'id']
-            //             },
-            //             include: [
-            //                 {
-            //                     model: roleModel,
-            //                     as: 'role'
-            //                 }]
-            //         },
-            //         {
-            //             model: productsModel,
-            //             as: 'products',
-            //             through: {
-            //                 attributes: [],
-            //             }
-            //         },
-            //         // {
-            //         //     model: orderHasProductModel,
-            //         //     as: 'orderProducts',
-            //         //     attributes: {
-            //         //         exclude: ['products_id', 'orders_id']
-            //         //     },
-            //         //     // include: [
-            //         //     //     {
-            //         //     //         model: productModel,
-            //         //     //         as: 'products'
-            //         //     //     }
-            //         //     // ]
-            //         // },
-            //         'status',
-            //         'pay',
-            //     ]
-            // });
             const orders = await orderModel.findAll({
                 attributes: {
                     exclude: ['users_id', 'status_id', 'pay_method_id'],
                 },
                 include: [
-                   'products'
+                    {
+                        model: userModel,
+                        as: 'user',
+                        attributes: {
+                            exclude: ['password', 'roles_id', 'id']
+                        },
+                        include: [
+                            {
+                                model: roleModel,
+                                as: 'role'
+                            }]
+                    },
+                    {
+                        model: productsModel,
+                        as: 'products',
+                        attributes: {
+                            exclude: ['price']
+                        }
+                    },
+                    'status',
+                    'pay',
                 ]
             });
             return res.json({
@@ -90,7 +69,7 @@ class OrdersController {
                     'status',
                     'pay',
                 ],
-                where: {id: req.params.id}
+                where: { id: req.params.id }
             });
             return res.json({
                 status: 200,

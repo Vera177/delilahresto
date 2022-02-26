@@ -19,7 +19,4 @@ const model = connection.define(
     }, { timestamps: false }
 );
 
-// model.belongsTo(productModel, {as: 'products', foreignKey: 'products_id'});
-// model.belongsTo(ordersModel, {as: 'orders', foreignKey: 'orders_id'});
-
 module.exports = model;
