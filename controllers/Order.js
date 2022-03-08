@@ -26,20 +26,42 @@ class OrdersController {
                                 as: 'role'
                             }]
                     },
-                    {
-                        model: productsModel,
-                        as: 'products',
-                        attributes: {
-                            exclude: ['price']
-                        }
-                    },
                     'status',
                     'pay',
-                ]
+                ],
+                raw: true,
+                nest: true
             });
+            const response = [...orders];
+            for (let index = 0; index < response.length; index++) {
+                const ordersHasProducts = await orderHasProductModel.findAll(
+                    {
+                        where: {
+                            orders_id: response[index].id
+                        },
+                        raw: true,
+                        nest: true
+                    }
+                );
+                response[index].products = [];
+                for (let j = 0; j < ordersHasProducts.length; j++) {
+                    const element = ordersHasProducts[j];
+                    const product = await productsModel.findOne({
+                        where: {
+                            id: element.products_id
+                        },
+                        raw: true,
+                        nest: true
+                    });
+                    response[index].products.push({ 
+                        ...product, 
+                        amount: element.amount 
+                    });
+                }
+            }
             return res.json({
                 status: 200,
-                data: orders
+                data: response
             });
         }
         catch (error) {
