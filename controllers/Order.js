@@ -53,9 +53,9 @@ class OrdersController {
                         raw: true,
                         nest: true
                     });
-                    response[index].products.push({ 
-                        ...product, 
-                        amount: element.amount 
+                    response[index].products.push({
+                        ...product,
+                        amount: element.amount
                     });
                 }
             }
@@ -71,7 +71,7 @@ class OrdersController {
 
     static async getById(req, res) {
         try {
-            const orders = await orderModel.findOne({
+            const orders = await orderModel.findAll({
                 attributes: {
                     exclude: ['users_id', 'status_id', 'pay_method_id'],
                 },
@@ -91,53 +91,84 @@ class OrdersController {
                     'status',
                     'pay',
                 ],
-                where: { id: req.params.id }
+                raw: true,
+                nest: true
             });
+            const response = [...orders];
+            for (let index = 0; index < response.length; index++) {
+                const ordersHasProducts = await orderHasProductModel.findAll(
+                    {
+                        where: {
+                            orders_id: response[index].id
+                        },
+                        raw: true,
+                        nest: true
+                    }
+                );
+                response[index].products = [];
+                for (let j = 0; j < ordersHasProducts.length; j++) {
+                    const element = ordersHasProducts[j];
+                    const product = await productsModel.findOne({
+                        where: {
+                            id: element.products_id
+                        },
+                        raw: true,
+                        nest: true
+                    });
+                    response[index].products.push({
+                        ...product,
+                        amount: element.amount
+                    });
+                }
+            }
+            const number = req.params.id
+            const idOrder = response[number - 1]
             return res.json({
                 status: 200,
-                data: orders
+                data: idOrder
             });
-        } catch (error) {
+        }
+        catch (error) {
             return next(error);
         }
     }
 
     static async create(req, res, next) {
         const {
-            date,
-            total
+            date, total, users_id, status_id, pay_method_id, amount, products_id, orders_id
         } = req.body;
         try {
-            if (!date || !total) {
-                throw { status: 422, message: 'date and total are required' };
-            }
-            await orderModel.create(
-                { date, total },
-                { fields: ['date', 'total '] }
-            );
-            return res.status(201).json({
-                status: 201,
-                message: 'Nuevo pedido creado'
+            orderModel.create({
+                date, total, users_id, status_id, pay_method_id
             });
-        } catch (error) {
+            orderHasProductModel.create({
+                amount, products_id, orders_id
+            });
+            return res.json({
+                status: 200,
+                data: "¡Recibimos tu pedido!"
+            });
+        }
+        //ORDERS_ID DEBE SER AUTOINCREMENTAL Y CHEQUEAR POR QUÉ NÚMERO VA [...orders] quizá?
+        //HACER LÓGICA PARA AMOUNT Y TOTAL
+        catch (error) {
             return next(error);
         }
     }
 
     static async update(req, res, next) {
         const {
-            name,
-            price,
-            url_image,
+            status_id
         } = req.body;
         try {
             await orderModel.update(
-                { name, price, url_image },
+                { status_id },
                 { where: { id: req.params.id } }
             );
+            console.log(status_id);
             return res.status(200).json({
                 status: 200,
-                message: `pedido actualizado con exito`
+                message: `estado del pedido actualizado con exito`
             });
         } catch (error) {
             return next(error);
@@ -146,12 +177,15 @@ class OrdersController {
 
     static async delete(req, res, next) {
         try {
+            await orderHasProductModel.destroy({
+                where: {orders_id : req.params.id}
+            });
             await orderModel.destroy(
                 { where: { id: req.params.id } }
             );
             return res.status(200).json({
                 status: 200,
-                message: `Producto eliminado con exito`
+                message: `Orden eliminada con exito`
             });
         } catch (error) {
             return next(error);
