@@ -23,10 +23,12 @@ if(config.env === 'development'){
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 
+/* users */
 app.post('/user', userController.create);
 app.get('/user', userController.getAll);
 app.post('/user/login', userController.login);
 
+/*products */
 app.get('/product/', productController.getAll);
 app.get('/product/:id', productController.getById);
 app.post('/product', productController.create);
