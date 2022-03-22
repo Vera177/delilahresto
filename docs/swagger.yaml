@@ -12,7 +12,7 @@ tags:
     description: Iniciar sesión, crear nuevo usuario, obtener todos los usuarios
   - name: product
     description: Obtener todos los productos, crear nuevo producto, actualizar producto por id, obtener producto por id y eliminar producto por id
-  - name: orders
+  - name: order
     description: Modulo de ordenes
 paths:
   /user/login:
@@ -228,6 +228,41 @@ paths:
       security:
         - Authorization: []
   /product/{id}:
+    get:
+      tags:
+        - product
+      summary: Endpoint para obtener producto por id
+      parameters:
+      - name: id
+        in: path
+        description: ID del producto
+        required: true
+        schema:
+          type: number
+          example: 1
+      responses:
+        200:
+          description: Obtiene producto por id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: 200
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/user'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - Authorization: []  
     patch:
       tags:
         - product
@@ -278,42 +313,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       security:
-        - Authorization: []
-    get:
-      tags:
-        - product
-      summary: Endpoint para obtener producto por id
-      parameters:
-      - name: id
-        in: path
-        description: ID del producto
-        required: true
-        schema:
-          type: number
-          example: 1
-      responses:
-        200:
-          description: Obtiene producto por id
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status: 
-                    type: 200
-                    example: 200
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/user'
-        500:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
-      security:
-        - Authorization: []   
+        - Authorization: [] 
     delete:
       tags:
         - product
@@ -351,6 +351,109 @@ paths:
         - Authorization: []
   /order:
     get:
+      tags:
+        - order
+      summary: Endpoint para obtener todos los pedidos
+      responses:
+        200:
+          description: Obtiene todos los pedidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: 200
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/order'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - Authorization: []  
+  /order/{id}:
+    get:
+      tags:
+        - order
+      summary: Endpoint para obtener orden por id
+      parameters:
+      - name: id
+        in: path
+        description: ID de la orden
+        required: true
+        schema:
+          type: number
+          example: 1
+      responses:
+        200:
+          description: Obtiene una orden por su id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: 200
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/order'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - Authorization: []  
+    patch:
+      tags:
+        - order
+      summary: Endpoint para actualizar estado del pedido
+      parameters:
+      - name: id
+        in: path
+        description: ID del pedido
+        required: true
+        schema:
+          type: number
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/status'
+      responses:
+        201:
+          description: Estado del producto actualizado con exito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  message:
+                    type: string
+                    example: Estado del producto actualizado!
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+     
+      security:
+        - Authorization: []
+
 components:
   schemas:
     error:
@@ -367,6 +470,7 @@ components:
       properties:
         id:
           type: number
+          example: 1
         user_name:
           type: string
         name:
@@ -386,8 +490,68 @@ components:
       properties:
         id:
           type: number
+          example: 2
         name:
           type: string
+          example: user
+    status:
+      type: object
+      properties:
+        status_id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: Nuevo
+    pay_method:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: Efectivo
+    product:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: Bagel de Salmon
+        price:
+          type: number
+          example: 425
+        url_image:
+          type: string
+          example: https://www.casanhelp.com.ar/wp-content/uploads/2020/05/bagel-de-salmon-169.jpg
+        amount:
+          type: number
+          example: 1
+    order:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        date:
+          type: string
+          format: date-time
+        total:
+          type: number
+          example: 1000
+        user:
+          $ref: '#/components/schemas/user'
+        role:           
+          $ref: '#/components/schemas/role' 
+        status:
+          $ref: '#/components/schemas/status' 
+        pay_method:
+          $ref: '#/components/schemas/pay_method'
+        product:
+          $ref: '#components/schemas/product'
 
   securitySchemes:
     Authorization:
