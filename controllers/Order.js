@@ -145,7 +145,7 @@ class OrdersController {
                 amount, products_id, orders_id
             });
             return res.json({
-                status: 200,
+                status: 201,
                 data: "¡Recibimos tu pedido!"
             });
         }
