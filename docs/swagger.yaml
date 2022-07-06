@@ -387,17 +387,32 @@ paths:
             schema:
               type: object
               properties:
-                name:
-                  type: string
-                  example: Bacalao
+                date:
+                  type: date
+                  example: "2022-03-21T21:24:00.000Z"
                   required: true
-                price:
+                total:
                   type: number
                   example: 300
                   required: true
-                url_image:
-                  type: string
-                  example: https://www.casanhelp.com.ar/wp-content/uploads/2020/05/bagel-de-salmon-169.jpg
+                users_id:
+                  type: number
+                  example: 2
+                status_id:
+                  type: number
+                  example: 1
+                pay_method_id:
+                  type: number
+                  example: 1
+                products_id:
+                  type: number
+                  example: 1
+                orders_id:
+                  type: number
+                  example: 3
+                amount:
+                  type: number
+                  example: 2
       responses:
         201:
           description: Producto creado con exito
