@@ -138,10 +138,10 @@ class OrdersController {
             date, total, users_id, status_id, pay_method_id, amount, products_id, orders_id
         } = req.body;
         try {
-            orderModel.create({
+            await orderModel.create({
                 date, total, users_id, status_id, pay_method_id
             });
-            orderHasProductModel.create({
+            await orderHasProductModel.create({
                 amount, products_id, orders_id
             });
             return res.json({
