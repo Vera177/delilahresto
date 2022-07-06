@@ -377,6 +377,49 @@ paths:
                 $ref: '#/components/schemas/error'
       security:
         - Authorization: []  
+    post:
+      tags:
+        - order
+      summary: Endpoint para crear un pedido
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Bacalao
+                  required: true
+                price:
+                  type: number
+                  example: 300
+                  required: true
+                url_image:
+                  type: string
+                  example: https://www.casanhelp.com.ar/wp-content/uploads/2020/05/bagel-de-salmon-169.jpg
+      responses:
+        201:
+          description: Producto creado con exito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  message:
+                    type: string
+                    example: Producto creado!
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - Authorization: []
   /order/{id}:
     get:
       tags:
@@ -453,7 +496,41 @@ paths:
      
       security:
         - Authorization: []
-
+    delete:
+      tags:
+        - order
+      summary: Endpoint para eliminar una orden por id
+      parameters:
+      - name: id
+        in: path
+        description: ID de la orden
+        required: true
+        schema:
+          type: number
+          example: 1
+      responses:
+        200:
+          description: Elimina una orden por su id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: 200
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/user'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - Authorization: []
 components:
   schemas:
     error:
