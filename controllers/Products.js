@@ -1,6 +1,6 @@
 const productModel = require('../models/product');
-
 const jwtHelper = require('../helpers/jwt');
+const userModel = require('../models/user');
 
 class ProductsController {
 
@@ -30,12 +30,21 @@ class ProductsController {
     }
 
     static async create(req, res, next) {
+        const headerAuth = req.headers['authorization'];
+        const [, token] = headerAuth.split(' ');
         const {
             name,
             price,
             url_image
         } = req.body;
+        const idRol = jwtHelper.decode(token);
+        if (!headerAuth) {
+            return res.status('401').json({ message: 'Token is missing!' });
+        }
         try {
+            if (idRol.user.id != 1) {
+                throw { status: 401, message: 'Must be admin to proceed' };
+            }
             if (!name || !price) {
                 throw { status: 422, message: 'product and price are required' };
             }
@@ -53,12 +62,21 @@ class ProductsController {
     }
 
     static async update(req, res, next) {
+        const headerAuth = req.headers['authorization'];
+        const [, token] = headerAuth.split(' ');
+        const idRol = jwtHelper.decode(token);
+        if (!headerAuth) {
+            return res.status('401').json({ message: 'Token is missing!' });
+        }
         const {
             name,
             price,
             url_image,
         } = req.body;
         try {
+            if (idRol.user.id != 1) {
+                throw { status: 401, message: 'Must be admin to proceed' };
+            }
             await productModel.update(
                 { name, price, url_image },
                 { where: { id: req.params.id } }
@@ -73,7 +91,16 @@ class ProductsController {
     }
 
     static async delete(req, res, next) {
+        const headerAuth = req.headers['authorization'];
+        const [, token] = headerAuth.split(' ');
+        const idRol = jwtHelper.decode(token);
+        if (!headerAuth) {
+            return res.status('401').json({ message: 'Token is missing!' });
+        }
         try {
+            if (idRol.user.id != 1) {
+                throw { status: 401, message: 'Must be admin to proceed' };
+            }
             await productModel.destroy(
                 { where: { id: req.params.id } }
             );
