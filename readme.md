@@ -21,7 +21,13 @@ _Es opcional el uso de nvm en lugar de node.js, como también el uso de Docker p
 
 ### Instalación 🔧
 
-_Comenzaremos abriendo el programa DBeaver, donde creamos nuestra base de datos llamada: delilah_resto. Luego descargamos el proyecto en nuestra máquina local._
+_Comenzaremos abriendo el programa DBeaver, donde creamos nuestra base de datos:_
+
+```
+CREATE DATABASE delilah_resto;
+```
+
+_Luego descargamos el proyecto en nuestra máquina local._
 
 ```
 git clone https://github.com/Vera177/delilahresto.git
