@@ -37,12 +37,12 @@ class ProductsController {
             price,
             url_image
         } = req.body;
-        const idRol = jwtHelper.decode(token);
+        const userFromToken = jwtHelper.decode(token);
         if (!headerAuth) {
             return res.status('401').json({ message: 'Token is missing!' });
         }
         try {
-            if (idRol.user.id != 1) {
+            if (userFromToken.user.admin = 'false') {
                 throw { status: 401, message: 'Must be admin to proceed' };
             }
             if (!name || !price) {
@@ -64,7 +64,7 @@ class ProductsController {
     static async update(req, res, next) {
         const headerAuth = req.headers['authorization'];
         const [, token] = headerAuth.split(' ');
-        const idRol = jwtHelper.decode(token);
+        const userFromToken = jwtHelper.decode(token);
         if (!headerAuth) {
             return res.status('401').json({ message: 'Token is missing!' });
         }
@@ -74,7 +74,7 @@ class ProductsController {
             url_image,
         } = req.body;
         try {
-            if (idRol.user.id != 1) {
+            if (userFromToken.user.admin = 'false') {
                 throw { status: 401, message: 'Must be admin to proceed' };
             }
             await productModel.update(
@@ -93,12 +93,12 @@ class ProductsController {
     static async delete(req, res, next) {
         const headerAuth = req.headers['authorization'];
         const [, token] = headerAuth.split(' ');
-        const idRol = jwtHelper.decode(token);
+        const userFromToken = jwtHelper.decode(token);
         if (!headerAuth) {
             return res.status('401').json({ message: 'Token is missing!' });
         }
         try {
-            if (idRol.user.id != 1) {
+            if (userFromToken.user.admin = 'false') {
                 throw { status: 401, message: 'Must be admin to proceed' };
             }
             await productModel.destroy(
