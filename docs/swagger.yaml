@@ -419,17 +419,17 @@ paths:
                 $ref: '#/components/schemas/error'
       security:
         - Authorization: []
-  /order/:orderId/product/:productId: 
+  /order/{orderId}/product/{productId}: 
     post:
       parameters:
-      - name: id order
+      - name: orderId
         in: path
         description: ID de la orden
         required: true
         schema:
           type: number
           example: 1
-      - name: id product
+      - name: productId
         in: path
         description: ID del producto a agregar
         required: true
