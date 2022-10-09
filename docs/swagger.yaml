@@ -391,28 +391,12 @@ paths:
                   type: date
                   example: "2022-03-21T21:24:00.000Z"
                   required: true
-                total:
-                  type: number
-                  example: 300
-                  required: true
                 users_id:
                   type: number
                   example: 2
-                status_id:
-                  type: number
-                  example: 1
                 pay_method_id:
                   type: number
                   example: 1
-                products_id:
-                  type: number
-                  example: 1
-                orders_id:
-                  type: number
-                  example: 3
-                amount:
-                  type: number
-                  example: 2
       responses:
         201:
           description: Producto creado con exito
@@ -427,6 +411,57 @@ paths:
                   message:
                     type: string
                     example: Producto creado!
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - Authorization: []
+  /order/:orderId/product/:productId: 
+    post:
+      parameters:
+      - name: id order
+        in: path
+        description: ID de la orden
+        required: true
+        schema:
+          type: number
+          example: 1
+      - name: id product
+        in: path
+        description: ID del producto a agregar
+        required: true
+        schema:
+          type: number
+          example: 1
+      tags:
+        - order
+      summary: Endpoint para agregar productos a un pedido
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  example: 1
+      responses:
+        201:
+          description: Producto agregado con exito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  message:
+                    type: string
+                    example: Producto agregado!
         500:
           description: Internal server error
           content:
