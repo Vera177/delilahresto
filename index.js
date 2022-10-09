@@ -41,6 +41,7 @@ app.get('/order/:id', orderController.getById);
 app.get('/order', orderController.getAll);
 app.patch('/order/:id', orderController.update);
 app.delete('/order/:id', OrdersController.delete);
+app.post('/order/:orderId/product/:productId', orderController.addProductsToOrder);
 
 app.use(notFoundMiddlerare);
 app.use(errorMiddleware);
