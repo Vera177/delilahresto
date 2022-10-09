@@ -71,7 +71,8 @@ class OrdersController {
 
     static async getById(req, res) {
         try {
-            const orders = await orderModel.findAll({
+            const orders = await orderModel.findOne({
+                where: { id: req.params.id },
                 attributes: {
                     exclude: ['users_id', 'status_id', 'pay_method_id'],
                 },
@@ -94,38 +95,34 @@ class OrdersController {
                 raw: true,
                 nest: true
             });
-            const response = [...orders];
-            for (let index = 0; index < response.length; index++) {
-                const ordersHasProducts = await orderHasProductModel.findAll(
-                    {
-                        where: {
-                            orders_id: response[index].id
-                        },
-                        raw: true,
-                        nest: true
-                    }
-                );
-                response[index].products = [];
-                for (let j = 0; j < ordersHasProducts.length; j++) {
-                    const element = ordersHasProducts[j];
-                    const product = await productsModel.findOne({
-                        where: {
-                            id: element.products_id
-                        },
-                        raw: true,
-                        nest: true
-                    });
-                    response[index].products.push({
-                        ...product,
-                        amount: element.amount
-                    });
+            const response = { ...orders };
+            const ordersHasProducts = await orderHasProductModel.findAll(
+                {
+                    where: {
+                        orders_id: response.id
+                    },
+                    raw: true,
+                    nest: true
                 }
+            );
+            response.products = [];
+            for (let j = 0; j < ordersHasProducts.length; j++) {
+                const element = ordersHasProducts[j];
+                const product = await productsModel.findOne({
+                    where: {
+                        id: element.products_id
+                    },
+                    raw: true,
+                    nest: true
+                });
+                response.products.push({
+                    ...product,
+                    amount: element.amount
+                });
             }
-            const number = req.params.id
-            const idOrder = response[number - 1]
             return res.json({
                 status: 200,
-                data: idOrder
+                data: response
             });
         }
         catch (error) {
@@ -135,23 +132,51 @@ class OrdersController {
 
     static async create(req, res, next) {
         const {
-            date, total, users_id, status_id, pay_method_id, amount, products_id, orders_id
+            date, users_id, pay_method_id
         } = req.body;
+        const status_id = 1;
+        const total = 0;
         try {
-            await orderModel.create({
+            const orderCreated = await orderModel.create({
                 date, total, users_id, status_id, pay_method_id
-            });
-            await orderHasProductModel.create({
-                amount, products_id, orders_id
             });
             return res.json({
                 status: 201,
-                data: "¡Recibimos tu pedido!"
+                data: orderCreated
             });
         }
-        //ORDERS_ID DEBE SER AUTOINCREMENTAL Y CHEQUEAR POR QUÉ NÚMERO VA [...orders] quizá?
-        //HACER LÓGICA PARA AMOUNT Y TOTAL
         catch (error) {
+            return next(error);
+        }
+    }
+
+    static async addProductsToOrder(req, res, next) {
+        try {
+            const { orderId, productId } = req.params;
+            const { amount } = req.body;
+            const order = await orderModel.findByPk(orderId, {
+                include: ["products"]
+            });
+            if (!order) {
+                return res.status(404).json({
+                    message: 'order not found'
+                });
+            }
+            const product = await productsModel.findByPk(productId);
+            if (!product) {
+                return res.status(404).json({
+                    message: 'product not found'
+                });
+            }
+            await orderHasProductModel.create({
+                amount, products_id: productId, orders_id: orderId
+            });
+            const total = order.total + (amount * product.price);
+            await order.update({ total });
+            return res.status(201).json({
+                data: "success"
+            });
+        } catch (error) {
             return next(error);
         }
     }
@@ -178,7 +203,7 @@ class OrdersController {
     static async delete(req, res, next) {
         try {
             await orderHasProductModel.destroy({
-                where: {orders_id : req.params.id}
+                where: { orders_id: req.params.id }
             });
             await orderModel.destroy(
                 { where: { id: req.params.id } }
