@@ -31,6 +31,18 @@ class UserController {
     }
 
     static async getAll(req, res, next) {
+        const payload = req.headers['authorization'];
+        if (!payload) {
+            return res.status('401').json({ message: 'Token is missing!' });
+        }
+        const [, token] = payload.split(' ');
+        const tokenDecoded = jwtHelper.decode(token);
+        if (tokenDecoded.user.role === 'user') {
+            return res.status(401).json({
+                status: 401,
+                error: 'Usuario no autorizado'
+            });
+        }
         try {
             const users = await userModel.findAll({
                 attributes: {
@@ -66,7 +78,8 @@ class UserController {
             }
             const token = jwtHelper.encode({
                 user: {
-                    id: user.id
+                    id: user.id,
+                    role: user.role.name
                 }
             });
             return res.json({
