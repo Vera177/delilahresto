@@ -143,6 +143,10 @@ class OrdersController {
     }
 
     static async create(req, res, next) {
+        const payload = req.headers['authorization'];
+        if (!payload) {
+            return res.status('401').json({ message: 'Must sign in first!' });
+        }
         const {
             date, users_id, pay_method_id
         } = req.body;
