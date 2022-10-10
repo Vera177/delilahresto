@@ -82,6 +82,10 @@ class OrdersController {
     }
 
     static async getById(req, res) {
+        const payload = req.headers['authorization'];
+        if (!payload) {
+            return res.status('401').json({ message: 'Must sign in first!' });
+        }
         try {
             const orders = await orderModel.findOne({
                 where: { id: req.params.id },
@@ -167,6 +171,10 @@ class OrdersController {
     }
 
     static async addProductsToOrder(req, res, next) {
+        const payload = req.headers['authorization'];
+        if (!payload) {
+            return res.status('401').json({ message: 'Must sign in first!' });
+        }
         try {
             const { orderId, productId } = req.params;
             const { amount } = req.body;
@@ -200,7 +208,7 @@ class OrdersController {
     static async update(req, res, next) {
         const payload = req.headers['authorization'];
         if (!payload) {
-            return res.status('401').json({ message: 'Token is missing!' });
+            return res.status('401').json({ message: 'Must sign in first!' });
         }
         const [, token] = payload.split(' ');
         const tokenDecoded = jwtHelper.decode(token);
@@ -228,7 +236,7 @@ class OrdersController {
     static async delete(req, res, next) {
         const payload = req.headers['authorization'];
         if (!payload) {
-            return res.status('401').json({ message: 'Token is missing!' });
+            return res.status('401').json({ message: 'Must sign in first!' });
         }
         const [, token] = payload.split(' ');
         const tokenDecoded = jwtHelper.decode(token);
