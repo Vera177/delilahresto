@@ -30,21 +30,24 @@ class ProductsController {
     }
 
     static async create(req, res, next) {
-        const headerAuth = req.headers['authorization'];
-        const [, token] = headerAuth.split(' ');
+        const payload = req.headers['authorization'];
+        if (!payload) {
+            return res.status('401').json({ message: 'Token is missing!' });
+        }
+        const [, token] = payload.split(' ');
+        const tokenDecoded = jwtHelper.decode(token);
+        if (tokenDecoded.user.role === 'user') {
+            return res.status(401).json({
+                status: 401,
+                error: 'Usuario no autorizado'
+            });
+        }
         const {
             name,
             price,
             url_image
         } = req.body;
-        const userFromToken = jwtHelper.decode(token);
-        if (!headerAuth) {
-            return res.status('401').json({ message: 'Token is missing!' });
-        }
         try {
-            if (userFromToken.user.admin = 'false') {
-                throw { status: 401, message: 'Must be admin to proceed' };
-            }
             if (!name || !price) {
                 throw { status: 422, message: 'product and price are required' };
             }
