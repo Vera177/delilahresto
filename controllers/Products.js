@@ -65,11 +65,17 @@ class ProductsController {
     }
 
     static async update(req, res, next) {
-        const headerAuth = req.headers['authorization'];
-        const [, token] = headerAuth.split(' ');
-        const userFromToken = jwtHelper.decode(token);
-        if (!headerAuth) {
+        const payload = req.headers['authorization'];
+        if (!payload) {
             return res.status('401').json({ message: 'Token is missing!' });
+        }
+        const [, token] = payload.split(' ');
+        const tokenDecoded = jwtHelper.decode(token);
+        if (tokenDecoded.user.role === 'user') {
+            return res.status(401).json({
+                status: 401,
+                error: 'Usuario no autorizado'
+            });
         }
         const {
             name,
@@ -77,9 +83,6 @@ class ProductsController {
             url_image,
         } = req.body;
         try {
-            if (userFromToken.user.admin = 'false') {
-                throw { status: 401, message: 'Must be admin to proceed' };
-            }
             await productModel.update(
                 { name, price, url_image },
                 { where: { id: req.params.id } }
