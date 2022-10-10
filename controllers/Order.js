@@ -194,15 +194,24 @@ class OrdersController {
     }
 
     static async update(req, res, next) {
-        const {
-            status_id
-        } = req.body;
+        const payload = req.headers['authorization'];
+        if (!payload) {
+            return res.status('401').json({ message: 'Token is missing!' });
+        }
+        const [, token] = payload.split(' ');
+        const tokenDecoded = jwtHelper.decode(token);
+        if (tokenDecoded.user.role === 'user') {
+            return res.status(401).json({
+                status: 401,
+                error: 'Usuario no autorizado'
+            });
+        }
+        const { status_id } = req.body;
         try {
             await orderModel.update(
                 { status_id },
                 { where: { id: req.params.id } }
             );
-            console.log(status_id);
             return res.status(200).json({
                 status: 200,
                 message: `estado del pedido actualizado con exito`
