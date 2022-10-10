@@ -222,6 +222,18 @@ class OrdersController {
     }
 
     static async delete(req, res, next) {
+        const payload = req.headers['authorization'];
+        if (!payload) {
+            return res.status('401').json({ message: 'Token is missing!' });
+        }
+        const [, token] = payload.split(' ');
+        const tokenDecoded = jwtHelper.decode(token);
+        if (tokenDecoded.user.role === 'user') {
+            return res.status(401).json({
+                status: 401,
+                error: 'Usuario no autorizado'
+            });
+        }
         try {
             await orderHasProductModel.destroy({
                 where: { orders_id: req.params.id }
